@@ -1,0 +1,29 @@
+@use "../variables" as *;
+
+.site-footer {
+  @apply bg-secondary text-white py-10 text-center mt-16;
+
+  .footer-content {
+    @apply flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0;
+  }
+
+  .footer-info {
+    p {
+      @apply mb-2;
+
+      &:last-child {
+        @apply mb-0 text-gray-300;
+      }
+    }
+  }
+
+  .footer-navigation {
+    ul {
+      @apply flex space-x-4 m-0 p-0 list-none;
+    }
+
+    a {
+      @apply text-white no-underline hover:text-gray-200 transition-colors;
+    }
+  }
+}

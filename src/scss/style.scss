@@ -1,0 +1,81 @@
+// TailwindCSS imports
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+// SCSS Variables
+@use "variables" as *;
+@use "mixins" as *;
+@use "reset";
+
+// Components
+@use "components/header";
+@use "components/footer";
+@use "components/buttons";
+@use "components/cards";
+
+// Layout
+.container {
+  @apply max-w-7xl mx-auto px-4;
+}
+
+// Global styles
+body {
+  font-family: $font-primary;
+  font-size: $font-size-base;
+  line-height: 1.6;
+  color: $color-text;
+  background: $color-bg;
+}
+
+// WordPress specific styles
+.wp-block-group {
+  @apply mb-6;
+}
+
+.wp-block-image {
+  @apply mb-6;
+
+  img {
+    @apply rounded-lg shadow-md;
+  }
+}
+
+.wp-block-quote {
+  @apply border-l-4 border-primary pl-6 italic text-gray-600 my-6;
+}
+
+.wp-block-pullquote {
+  @apply text-center text-xl font-medium text-gray-700 my-8 py-6 border-t border-b border-gray-200;
+}
+
+// Gutenberg blocks
+.wp-block-button {
+  .wp-block-button__link {
+    @apply inline-block px-6 py-3 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition-colors no-underline;
+  }
+}
+
+.wp-block-columns {
+  @apply grid gap-6 md:grid-cols-2 lg:grid-cols-3;
+}
+
+.wp-block-media-text {
+  @apply grid gap-6 md:grid-cols-2 items-center;
+}
+
+// Custom utilities combining SCSS with Tailwind
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}
