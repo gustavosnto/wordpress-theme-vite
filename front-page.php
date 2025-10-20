@@ -3,7 +3,7 @@
 <main class="site-main">
     <!-- Hero Section com Swiper -->
     <section class="hero-section bg-gradient-to-r from-primary to-primary/80 text-white py-20">
-        <div class="container mx-auto px-4">
+        <div class="container">
             <div class="swiper hero-swiper max-w-4xl mx-auto">
                 <div class="swiper-wrapper">
                     <div class="swiper-slide text-center">
@@ -41,7 +41,7 @@
 
     <!-- Seção de Posts Recentes -->
     <section class="py-16 bg-gray-50">
-        <div class="container mx-auto px-4">
+        <div class="container">
             <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">Posts Recentes</h2>
             
             <?php
@@ -96,7 +96,7 @@
 
     <!-- Seção de Recursos -->
     <section class="py-16">
-        <div class="container mx-auto px-4">
+        <div class="container">
             <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">Recursos do Tema</h2>
             
             <div class="swiper features-swiper">

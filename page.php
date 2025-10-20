@@ -1,7 +1,7 @@
 <?php get_header(); ?>
 
 <main class="site-main">
-    <div class="container mx-auto px-4 max-w-4xl">
+    <div class="container max-w-4xl">
         <?php
         while (have_posts()) : the_post();
             ?>

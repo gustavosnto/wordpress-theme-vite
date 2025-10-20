@@ -1,7 +1,7 @@
 <?php get_header(); ?>
 
 <main class="site-main">
-    <div class="container mx-auto px-4">
+    <div class="container">
         <?php if (have_posts()) : ?>
             
             <header class="page-header mb-12 text-center">
