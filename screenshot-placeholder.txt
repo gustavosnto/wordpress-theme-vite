@@ -1,2 +1,0 @@
-# Este arquivo serve como placeholder para o screenshot do tema
-# Substitua por uma imagem PNG de 1200x900 pixels mostrando o design do seu tema
