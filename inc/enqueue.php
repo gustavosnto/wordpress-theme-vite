@@ -7,12 +7,20 @@ if (!defined('ABSPATH')) exit;
 function is_vite_development() {
     $vite_server = 'http://localhost:5173';
     
+    // Verifica se estamos acessando através do proxy do Vite
+    $is_vite_request = isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] === 'localhost:5173';
+    
     // Verifica se WP_DEBUG está ativo
     if (!defined('WP_DEBUG') || !WP_DEBUG) {
         return false;
     }
     
-    // Verifica se o servidor Vite está respondendo
+    // Se estamos no proxy do Vite, retorna true
+    if ($is_vite_request) {
+        return true;
+    }
+    
+    // Caso contrário, verifica se o servidor Vite está respondendo
     $context = stream_context_create([
         'http' => [
             'timeout' => 1,
@@ -48,9 +56,28 @@ function theme_vite_assets() {
         );
         wp_script_add_data('theme-main', 'type', 'module');
         
+        // Adiciona CSS para indicador visual de HMR no frontend
+        add_action('wp_head', function() {
+            echo '<style>
+                body::before {
+                    content: "🔥 HMR ATIVO";
+                    position: fixed;
+                    top: 0;
+                    right: 0;
+                    background: #00ff00;
+                    color: black;
+                    padding: 4px 8px;
+                    font-size: 12px;
+                    z-index: 9999;
+                    font-family: monospace;
+                    border-radius: 0 0 0 4px;
+                }
+            </style>';
+        });
+        
         // Adiciona comentário no HTML para debug
         add_action('wp_head', function() {
-            echo "<!-- Vite Development Mode Active -->\n";
+            echo "<!-- Vite Development Mode Active (Proxy: " . (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] === 'localhost:5173' ? 'YES' : 'NO') . ") -->\n";
         });
         
     } else {

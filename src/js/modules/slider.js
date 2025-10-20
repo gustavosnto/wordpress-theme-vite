@@ -7,12 +7,67 @@ import "swiper/css/autoplay";
 import "swiper/css/effect-fade";
 
 export function initSlider() {
-  // Configuração padrão do Swiper
-  const swiperElements = document.querySelectorAll(".swiper");
+
+  // Hero Slider específico
+  const heroSlider = document.querySelector(".hero-swiper");
+  if (heroSlider) {
+    console.log("🦸 Inicializando Hero Slider");
+    new Swiper(heroSlider, {
+      modules: [Navigation, Pagination, Autoplay, EffectFade],
+      slidesPerView: 1,
+      spaceBetween: 0,
+      loop: true,
+      autoplay: {
+        delay: 8000,
+        disableOnInteraction: false,
+      },
+      navigation: {
+        nextEl: ".hero-swiper .swiper-button-next",
+        prevEl: ".hero-swiper .swiper-button-prev",
+      },
+      pagination: {
+        el: ".hero-swiper .swiper-pagination",
+        clickable: true,
+      },
+      effect: "fade",
+      fadeEffect: {
+        crossFade: true,
+      },
+    });
+  }
+
+  // Features Slider específico
+  const featuresSlider = document.querySelector(".features-swiper");
+  if (featuresSlider) {
+    console.log("✨ Inicializando Features Slider");
+    new Swiper(featuresSlider, {
+      modules: [Navigation, Pagination, Autoplay],
+      slidesPerView: 1,
+      spaceBetween: 30,
+      loop: true,
+      autoplay: {
+        delay: 4000,
+        disableOnInteraction: false,
+      },
+      pagination: {
+        el: ".features-swiper .swiper-pagination",
+        clickable: true,
+      },
+      breakpoints: {
+        640: {
+          slidesPerView: 2,
+          spaceBetween: 20,
+        },
+        1024: {
+          slidesPerView: 3,
+          spaceBetween: 30,
+        },
+      },
+    });
+  }
 
   if (swiperElements.length === 0) {
-    console.log("Nenhum elemento .swiper encontrado");
-    return;
+    console.log("Nenhum elemento .swiper genérico encontrado");
   }
 
   swiperElements.forEach((element) => {
