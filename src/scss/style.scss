@@ -1,9 +1,4 @@
-// TailwindCSS imports
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-// SCSS Variables
+// SCSS Variables and mixins - MUST come first
 @use "variables" as *;
 @use "mixins" as *;
 @use "reset";
@@ -13,6 +8,11 @@
 @use "components/footer";
 @use "components/buttons";
 @use "components/cards";
+
+// TailwindCSS imports
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 // Layout
 .container {
