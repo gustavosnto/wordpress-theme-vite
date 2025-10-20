@@ -7,7 +7,7 @@
             <div class="swiper hero-swiper max-w-4xl mx-auto">
                 <div class="swiper-wrapper">
                     <div class="swiper-slide text-center">
-                        <h1 class="text-5xl font-bold mb-6">Bem-vindo ao Nosso Site</h1>
+                        <h1 class="text-5xl font-bold mb-6">Bem-vindo ao Nosso Site! (TESTE AUTO-REFRESH) ✨</h1>
                         <p class="text-xl mb-8 opacity-90">Tema WordPress moderno com TailwindCSS e Swiper</p>
                         <a href="#sobre" class="btn btn-outline">
                             Saiba Mais

@@ -1,26 +1,37 @@
 /**
- * Plugin personalizado para WordPress + Vite HMR
- * Versão simplificada para evitar problemas de decodificação
+ * Plugin personalizado para WordPress + Vite HMR com Auto-Refresh
  */
+const chokidar = require("chokidar");
+
 export function wordpressHmrPlugin() {
   return {
     name: "wordpress-hmr",
     configureServer(server) {
-      // Log de conexões HMR
-      server.ws.on("connection", () => {
-        console.log("🔥 Cliente HMR conectado!");
+      console.log("🔥 WordPress HMR Plugin ativo!");
+
+      // Listener para mudanças de arquivos
+      const watcher = chokidar.watch(
+        ["**/*.php", "src/**/*.js", "src/**/*.scss"],
+        {
+          ignored: ["node_modules/**", "vendor/**"],
+          persistent: true,
+          cwd: process.cwd(),
+        }
+      );
+
+      watcher.on("change", (path) => {
+        console.log(`🔄 Arquivo alterado: ${path}`);
+
+        // Força reload completo da página
+        server.ws.send({
+          type: "full-reload",
+          path: "*",
+        });
       });
 
-      // Log de requisições para debug
-      server.middlewares.use((req, res, next) => {
-        if (
-          req.url &&
-          !req.url.startsWith("/@") &&
-          !req.url.startsWith("/src/")
-        ) {
-          console.log(`📄 Servindo página: ${req.url}`);
-        }
-        next();
+      // Cleanup ao fechar
+      server.httpServer?.on("close", () => {
+        watcher.close();
       });
     },
   };

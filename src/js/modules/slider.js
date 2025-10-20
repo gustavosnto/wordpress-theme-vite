@@ -7,7 +7,6 @@ import "swiper/css/autoplay";
 import "swiper/css/effect-fade";
 
 export function initSlider() {
-
   // Hero Slider específico
   const heroSlider = document.querySelector(".hero-swiper");
   if (heroSlider) {
@@ -66,54 +65,64 @@ export function initSlider() {
     });
   }
 
+  // Configuração padrão do Swiper para outros elementos
+  const swiperElements = document.querySelectorAll(
+    ".swiper:not(.hero-swiper):not(.features-swiper)"
+  );
+
+  console.log(
+    "🔍 Elementos .swiper genéricos encontrados:",
+    swiperElements.length
+  );
+
   if (swiperElements.length === 0) {
     console.log("Nenhum elemento .swiper genérico encontrado");
-  }
+  } else {
+    swiperElements.forEach((element) => {
+      new Swiper(element, {
+        modules: [Navigation, Pagination, Autoplay, EffectFade],
 
-  swiperElements.forEach((element) => {
-    new Swiper(element, {
-      modules: [Navigation, Pagination, Autoplay, EffectFade],
+        // Configurações básicas
+        slidesPerView: 1,
+        spaceBetween: 30,
+        loop: true,
 
-      // Configurações básicas
-      slidesPerView: 1,
-      spaceBetween: 30,
-      loop: true,
-
-      // Autoplay
-      autoplay: {
-        delay: 5000,
-        disableOnInteraction: false,
-      },
-
-      // Navegação
-      navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev",
-      },
-
-      // Paginação
-      pagination: {
-        el: ".swiper-pagination",
-        clickable: true,
-      },
-
-      // Responsive breakpoints
-      breakpoints: {
-        640: {
-          slidesPerView: 2,
-          spaceBetween: 20,
+        // Autoplay
+        autoplay: {
+          delay: 5000,
+          disableOnInteraction: false,
         },
-        768: {
-          slidesPerView: 2,
-          spaceBetween: 30,
+
+        // Navegação
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
         },
-        1024: {
-          slidesPerView: 3,
-          spaceBetween: 40,
+
+        // Paginação
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
         },
-      },
+
+        // Responsive breakpoints
+        breakpoints: {
+          640: {
+            slidesPerView: 2,
+            spaceBetween: 20,
+          },
+          768: {
+            slidesPerView: 2,
+            spaceBetween: 30,
+          },
+          1024: {
+            slidesPerView: 3,
+            spaceBetween: 40,
+          },
+        },
+      });
     });
-  });
+  }
 
   console.log("Swiper inicializado com sucesso!");
 }

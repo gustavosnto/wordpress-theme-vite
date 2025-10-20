@@ -5,29 +5,22 @@ if (!defined('ABSPATH')) exit;
  * Verifica se o servidor Vite está rodando
  */
 function is_vite_development() {
+    // Considera ambiente de dev se o servidor Vite estiver rodando
     $vite_server = 'http://localhost:5173';
-    
-    // Verifica se estamos acessando através do proxy do Vite
-    $is_vite_request = isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] === 'localhost:5173';
-    
-    // Verifica se WP_DEBUG está ativo
-    if (!defined('WP_DEBUG') || !WP_DEBUG) {
-        return false;
-    }
-    
-    // Se estamos no proxy do Vite, retorna true
-    if ($is_vite_request) {
+
+    // Se a constante nativa do WP indicar dev, já consideramos verdadeiro
+    if (defined('WP_ENVIRONMENT_TYPE') && WP_ENVIRONMENT_TYPE === 'development') {
         return true;
     }
-    
-    // Caso contrário, verifica se o servidor Vite está respondendo
+
+    // Tenta pingar o cliente do Vite rapidamente
     $context = stream_context_create([
         'http' => [
-            'timeout' => 1,
-            'method' => 'GET'
-        ]
+            'timeout' => 0.5,
+            'method' => 'GET',
+        ],
     ]);
-    
+
     $response = @file_get_contents($vite_server . '/@vite/client', false, $context);
     return $response !== false;
 }
@@ -49,12 +42,30 @@ function theme_vite_assets() {
         
         wp_enqueue_script(
             'theme-main',
-            $vite_server . '/js/main.js',
+            $vite_server . '/src/js/main.js',
             ['vite-client'],
             null,
             true
         );
         wp_script_add_data('theme-main', 'type', 'module');
+
+        // Garante que os scripts do Vite sejam carregados como modules
+        add_filter('script_loader_tag', function($tag, $handle, $src) {
+            $module_handles = ['vite-client', 'theme-main'];
+            if (in_array($handle, $module_handles, true)) {
+                // Normaliza para módulo sempre
+                return '<script type="module" src="' . esc_url($src) . '"></script>' . "\n";
+            }
+            return $tag;
+        }, 10, 3);
+
+        // Carrega o CSS principal como entrada separada (Vite atende e faz HMR de CSS)
+        wp_enqueue_style(
+            'theme-style',
+            $vite_server . '/src/scss/style.scss',
+            [],
+            null
+        );
         
         // Adiciona CSS para indicador visual de HMR no frontend
         add_action('wp_head', function() {
@@ -79,6 +90,8 @@ function theme_vite_assets() {
         add_action('wp_head', function() {
             echo "<!-- Vite Development Mode Active (Proxy: " . (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] === 'localhost:5173' ? 'YES' : 'NO') . ") -->\n";
         });
+        
+        // Não precisamos de WebSocket manual: @vite/client já cuida do HMR/full-reload
         
     } else {
         // Modo produção

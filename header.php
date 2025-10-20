@@ -7,7 +7,6 @@
 </head>
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
-
 <header class="site-header relative">
     <div class="container mx-auto px-4">
         <div class="site-branding">

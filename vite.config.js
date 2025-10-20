@@ -1,5 +1,4 @@
 import { defineConfig, loadEnv } from "vite";
-import liveReload from "vite-plugin-live-reload";
 import { wordpressHmrPlugin } from "./vite-wordpress-plugin.js";
 
 export default defineConfig(({ mode }) => {
@@ -9,9 +8,7 @@ export default defineConfig(({ mode }) => {
   const vitePort = parseInt(env.VITE_PORT) || 5173;
 
   return {
-    plugins: [liveReload([__dirname + "/**/*.php"]), wordpressHmrPlugin()],
-
-    root: "src",
+    plugins: [wordpressHmrPlugin()],
 
     build: {
       outDir: "../assets",
@@ -20,8 +17,8 @@ export default defineConfig(({ mode }) => {
 
       rollupOptions: {
         input: {
-          main: "./src/js/main.js",
-          style: "./src/scss/style.scss",
+          main: "src/js/main.js",
+          style: "src/scss/style.scss",
         },
         output: {
           entryFileNames: "js/[name].js",
@@ -37,6 +34,10 @@ export default defineConfig(({ mode }) => {
 
       minify: "esbuild",
       sourcemap: false,
+    },
+
+    optimizeDeps: {
+      include: ["swiper", "swiper/modules"],
     },
 
     css: {
@@ -83,6 +84,14 @@ export default defineConfig(({ mode }) => {
         host: "localhost",
         port: vitePort,
         protocol: "ws",
+        overlay: true,
+      },
+
+      // Configurações para melhor live reload
+      watch: {
+        usePolling: true,
+        interval: 300,
+        ignored: ["**/node_modules/**", "**/.git/**"],
       },
     },
   };
