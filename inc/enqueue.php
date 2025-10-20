@@ -66,6 +66,14 @@ function theme_vite_assets() {
             [],
             null
         );
+
+        // FontAwesome CSS
+        wp_enqueue_style(
+            'fontawesome',
+            get_template_directory_uri() . '/assets/awesome/all.css',
+            [],
+            null
+        );
         
         // Adiciona CSS para indicador visual de HMR no frontend
         add_action('wp_head', function() {
@@ -135,6 +143,14 @@ function theme_vite_assets() {
                     $theme_version
                 );
             }
+
+            // FontAwesome CSS
+            wp_enqueue_style(
+                'fontawesome',
+                get_template_directory_uri() . '/assets/awesome/all.css',
+                [],
+                $theme_version
+            );
             
             // Adiciona comentário no HTML para debug
             add_action('wp_head', function() {

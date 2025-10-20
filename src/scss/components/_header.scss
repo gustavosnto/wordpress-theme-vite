@@ -1,67 +1,165 @@
 @use "../variables" as *;
 @use "../mixins" as *;
 
+/* Header Moderno - TESTE AUTO-REFRESH */
 .site-header {
-  @apply bg-primary text-white py-5 relative;
-
-  .container {
-    @apply flex items-center justify-between;
+  // Sticky header com backdrop blur
+  &.scrolled {
+    @apply bg-white/95 backdrop-blur-sm;
   }
 
+  // Logo customizado
   .site-branding {
+    .custom-logo-link {
+      @apply inline-block;
+
+      img {
+        @apply h-8 lg:h-10 w-auto;
+      }
+    }
+
     h1 a {
-      @apply text-white no-underline font-bold text-2xl hover:text-gray-200 transition-colors;
+      @apply no-underline transition-colors duration-200;
     }
   }
 
+  // Navegação desktop
   .main-navigation {
-    @apply md:block;
-
     ul {
-      @apply flex space-x-6 m-0 p-0 list-none;
-    }
+      @apply m-0 p-0 list-none;
 
-    a {
-      @apply text-white no-underline hover:text-gray-200 transition-colors font-medium;
-    }
+      li {
+        @apply relative;
 
-    // Mobile menu
-    @include responsive(tablet) {
-      @apply hidden absolute top-full left-0 w-full bg-primary shadow-lg;
+        a {
+          @apply text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200 py-2 px-3 rounded-md hover:bg-gray-50 no-underline;
+        }
 
-      &.active {
-        @apply block;
-      }
+        // Submenu dropdown
+        ul {
+          @apply absolute top-full left-0 bg-white shadow-lg rounded-lg py-2 min-w-48 opacity-0 invisible translate-y-2 transition-all duration-200 z-50;
 
-      ul {
-        @apply flex-col space-x-0 space-y-2 p-4;
+          li a {
+            @apply block px-4 py-2 text-sm hover:bg-gray-50;
+          }
+        }
+
+        &:hover ul {
+          @apply opacity-100 visible translate-y-0;
+        }
       }
     }
   }
 
+  // Menu mobile toggle com ícones FontAwesome
   .menu-toggle {
-    @apply md:hidden bg-transparent border-none text-white cursor-pointer p-2 flex flex-col justify-center items-center w-10 h-10;
+    .menu-icon {
+      @apply transition-all duration-300;
+    }
 
-    span {
-      @apply block w-6 h-0.5 bg-white mb-1 transition-all duration-300;
-
-      &:last-child {
-        @apply mb-0;
-      }
+    .close-icon {
+      @apply transition-all duration-300;
     }
 
     &.active {
-      span:nth-child(1) {
-        @apply transform rotate-45 translate-y-1.5;
+      .menu-icon {
+        @apply opacity-0 scale-0 rotate-90;
       }
 
-      span:nth-child(2) {
-        @apply opacity-0;
-      }
-
-      span:nth-child(3) {
-        @apply transform -rotate-45 -translate-y-1.5;
+      .close-icon {
+        @apply opacity-100 scale-100 rotate-0;
       }
     }
+
+    &:hover {
+      @apply bg-gray-100 rounded-full;
+    }
+  }
+
+  .mobile-menu {
+    &.active {
+      @apply translate-x-0;
+    }
+
+    .mobile-nav-menu {
+      @apply space-y-0;
+
+      li {
+        a {
+          @apply flex items-center space-x-3 px-6 py-4 text-gray-700 hover:text-blue-600 hover:bg-gray-50 border-b border-gray-100 no-underline transition-colors duration-200;
+
+          &:before {
+            content: "";
+            @apply w-1 h-1 bg-gray-400 rounded-full;
+          }
+        }
+
+        &.menu-item-has-children {
+          > a:after {
+            content: "\f107";
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            @apply ml-auto text-gray-400;
+          }
+        }
+
+        // Submenu mobile
+        ul {
+          @apply bg-gray-50 space-y-0;
+
+          li a {
+            @apply pl-12 text-sm text-gray-600;
+
+            &:before {
+              @apply w-0.5 h-0.5;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Overlay para mobile menu
+.mobile-menu-overlay {
+  &.active {
+    @apply opacity-100 pointer-events-auto;
+  }
+}
+
+// Modal de busca
+#search-modal {
+  &.active {
+    .bg-white {
+      @apply scale-100;
+    }
+  }
+
+  .search-form {
+    input[type="search"] {
+      &:focus {
+        @apply ring-2 ring-blue-500 border-blue-500;
+      }
+
+      &::placeholder {
+        @apply text-gray-500;
+      }
+    }
+  }
+
+  // Animações do modal
+  .bg-white {
+    @apply transition-transform duration-300;
+  }
+}
+
+// Animação suave para scroll
+@media (prefers-reduced-motion: no-preference) {
+  .site-header {
+    @apply transition-all duration-300;
+  }
+
+  #search-modal {
+    @apply transition-all duration-300;
   }
 }

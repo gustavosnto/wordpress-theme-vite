@@ -21,6 +21,8 @@ function theme_setup() {
     register_nav_menus([
         'primary' => __('Menu Principal', 'meu-tema'),
         'footer' => __('Menu Rodapé', 'meu-tema'),
+        'footer-services' => __('Menu Serviços - Footer', 'meu-tema'),
+        'footer-links' => __('Menu Links Úteis - Footer', 'meu-tema'),
     ]);
     
     // Suporte a logo customizado
