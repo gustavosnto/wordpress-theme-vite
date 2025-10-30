@@ -5,15 +5,29 @@ if (!defined('ABSPATH')) exit;
  * Verifica se o servidor Vite está rodando
  */
 function is_vite_development() {
-    // Considera ambiente de dev se o servidor Vite estiver rodando
-    $vite_server = 'http://localhost:5173';
-
-    // Se a constante nativa do WP indicar dev, já consideramos verdadeiro
+    // 1. Verifica se está explicitamente em produção
+    if (defined('WP_ENVIRONMENT_TYPE') && WP_ENVIRONMENT_TYPE === 'production') {
+        return false;
+    }
+    
+    // 2. Verifica se está em desenvolvimento via constante
     if (defined('WP_ENVIRONMENT_TYPE') && WP_ENVIRONMENT_TYPE === 'development') {
         return true;
     }
-
-    // Tenta pingar o cliente do Vite rapidamente
+    
+    // 3. Verifica se está em ambiente local (fallback comum)
+    if (defined('WP_DEBUG') && WP_DEBUG === true) {
+        return true;
+    }
+    
+    // 4. Verifica pela URL se é localhost ou desenvolvimento
+    $current_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://" . $_SERVER['HTTP_HOST'];
+    if (strpos($current_url, 'localhost') !== false || strpos($current_url, '.local') !== false || strpos($current_url, '.test') !== false || strpos($current_url, '.dev') !== false) {
+        return true;
+    }
+    
+    // 5. Última verificação: tenta pingar o servidor Vite
+    $vite_server = 'http://localhost:5173';
     $context = stream_context_create([
         'http' => [
             'timeout' => 0.5,
@@ -159,8 +173,26 @@ function theme_vite_assets() {
         } else {
             // Fallback caso não exista o manifest
             add_action('wp_head', function() {
-                echo "<!-- Warning: Vite manifest not found. Run 'npm run build' -->\n";
+                echo "<!-- ERROR: Vite manifest not found. Please run 'npm run build' in theme directory -->\n";
             });
+            
+            // Carrega CSS de fallback se existir
+            if (file_exists(get_template_directory() . '/style.css')) {
+                wp_enqueue_style(
+                    'theme-fallback-style',
+                    get_template_directory_uri() . '/style.css',
+                    [],
+                    wp_get_theme()->get('Version')
+                );
+            }
+            
+            // FontAwesome CSS (sempre carregar)
+            wp_enqueue_style(
+                'fontawesome',
+                get_template_directory_uri() . '/assets/awesome/all.css',
+                [],
+                wp_get_theme()->get('Version')
+            );
         }
     }
 }
